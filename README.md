@@ -2,6 +2,19 @@
 
 เว็บแอปจัดการหนังสือ (รายเล่ม) สมาชิก และการยืมคืน ใช้งานบนมือถือได้
 
+## ลิงก์ระบบ (ออนไลน์)
+
+| หน้า | ลิงก์ |
+|---|---|
+| 🌐 เปิดระบบ | https://library-system-omega-three.vercel.app |
+| 📤 ยืมหนังสือ | https://library-system-omega-three.vercel.app/borrow |
+| 📥 คืนหนังสือ | https://library-system-omega-three.vercel.app/return |
+| 📚 หนังสือ | https://library-system-omega-three.vercel.app/books |
+| 👤 สมาชิก | https://library-system-omega-three.vercel.app/members |
+| 🔧 เอกสาร API | https://library-api-4nzv.onrender.com/docs |
+
+> API ใช้ Render แบบฟรี ถ้าไม่มีคนใช้สักพักจะหลับ การเปิดครั้งแรกอาจรอเกือบ 1 นาที
+
 **เงื่อนไขทดสอบ:** หนังสือเล่มเดียวกันมีรายการยืมที่ยังไม่คืนได้ไม่เกิน 1 รายการ
 บังคับ 2 ชั้น คือตรวจในโค้ด (`backend/app/services.py`) และ partial unique index ในฐานข้อมูล
 (`UNIQUE (book_id) WHERE returned_at IS NULL` ใน `backend/app/models.py`)

@@ -70,6 +70,28 @@
 
 ---
 
+## ที่ deploy จริงของโปรเจกต์นี้ และวิธีอัปเดตหลังแก้โค้ด
+
+| ส่วน | ที่อยู่ | วิธี deploy ที่ใช้ |
+|---|---|---|
+| หน้าเว็บ | https://library-system-omega-three.vercel.app | Vercel CLI จากเครื่อง (ไม่ได้เชื่อม Git) |
+| API | https://library-api-4nzv.onrender.com | Render Blueprint จาก public repo URL |
+| ฐานข้อมูล | Neon project `library` (Singapore) | — |
+
+**แก้หน้าเว็บ (frontend):** ในโฟลเดอร์ `frontend` รัน
+
+```bash
+npx vercel --prod --build-env VITE_API_URL=https://library-api-4nzv.onrender.com
+```
+
+**แก้ API (backend) หรือ `render.yaml`:** `git push` ขึ้น GitHub แล้วไปที่ Render → Blueprints →
+`library-system` → **Manual sync** (ถ้าแก้ `render.yaml`) หรือ service `library-api` →
+**Manual Deploy → Deploy latest commit** (ถ้าแก้โค้ด)
+
+**เปลี่ยนที่อยู่หน้าเว็บ:** แก้ค่า `ALLOWED_ORIGINS` ใน `render.yaml` แล้ว push และกด Manual sync
+
+---
+
 ## ข้อควรรู้
 
 - **Render แบบฟรีจะหลับเมื่อไม่มีคนใช้สักพัก** คนแรกที่เข้ามาต้องรอเกือบนาทีให้ server ตื่น
