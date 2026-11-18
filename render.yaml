@@ -1,0 +1,18 @@
+# ตั้งค่า back-end บน Render (อ่านอัตโนมัติเมื่อสร้างด้วย New > Blueprint)
+services:
+  - type: web
+    name: library-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.1
+      # ใส่ค่าเองในหน้า Render (ไม่เก็บไว้ใน Git เพราะมีรหัสผ่าน)
+      - key: DATABASE_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

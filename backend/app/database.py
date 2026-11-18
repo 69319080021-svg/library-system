@@ -9,7 +9,16 @@ import os
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./library.db")
+def normalize_url(url: str) -> str:
+    """ผู้ให้บริการ PostgreSQL (เช่น Neon) ให้ URL แบบ postgres:// หรือ postgresql://
+    แต่เราติดตั้งไดรเวอร์ psycopg (v3) จึงต้องบอก SQLAlchemy ให้ใช้ postgresql+psycopg://"""
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix):]
+    return url
+
+
+DATABASE_URL = normalize_url(os.getenv("DATABASE_URL", "sqlite:///./library.db"))
 
 
 def make_engine(url: str):
