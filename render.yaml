@@ -15,5 +15,6 @@ services:
       # ใส่ค่าเองในหน้า Render (ไม่เก็บไว้ใน Git เพราะมีรหัสผ่าน)
       - key: DATABASE_URL
         sync: false
+      # ที่อยู่หน้าเว็บบน Vercel (ไม่ใช่ความลับ) หลายที่คั่นด้วย ,
       - key: ALLOWED_ORIGINS
-        sync: false
+        value: https://library-system-omega-three.vercel.app
