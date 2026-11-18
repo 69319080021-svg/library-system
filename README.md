@@ -29,6 +29,65 @@
 | ทดสอบ | pytest |
 | Deploy | Vercel (หน้าเว็บ) + Render (API) + Neon (ฐานข้อมูล) |
 
+## โครงสร้างโปรเจกต์
+
+| โฟลเดอร์ / ไฟล์ | เนื้อหา |
+|---|---|
+| `backend/` | Source code ฝั่ง API (FastAPI) และเทสต์ (pytest) |
+| `frontend/` | Source code หน้าเว็บ (React + Vite + Tailwind) |
+| `database/` | **Database Script (PostgreSQL)** |
+| `render.yaml` | ตั้งค่า deploy back-end บน Render |
+| `DEPLOY.md` | ขั้นตอน deploy |
+
+## Database Script
+
+อยู่ในโฟลเดอร์ [`database/`](database) รันตามลำดับ
+
+| ไฟล์ | หน้าที่ |
+|---|---|
+| [`schema.sql`](database/schema.sql) | สร้างตาราง `books`, `members`, `loans` พร้อม constraint และ partial unique index ของกฎหลัก |
+| [`seed.sql`](database/seed.sql) | ข้อมูลตัวอย่าง (หนังสือ 3 เล่ม, สมาชิก 2 คน, รายการยืม 2 รายการ) |
+| [`test_rule.sql`](database/test_rule.sql) | ทดสอบเงื่อนไขของโจทย์ด้วย SQL ล้วน (ทำใน transaction แล้ว ROLLBACK ข้อมูลไม่เปลี่ยน) |
+| [`queries.sql`](database/queries.sql) | คำสั่งที่ใช้บ่อย เช่น สถานะหนังสือ รายการค้างคืน เลยกำหนด |
+
+```bash
+psql "<connection string>" -f database/schema.sql
+psql "<connection string>" -f database/seed.sql
+psql "<connection string>" -f database/test_rule.sql
+```
+
+หรือคัดลอกเนื้อหาไฟล์ไปวางใน Neon Console → **SQL Editor** แล้วกด Run
+
+```mermaid
+erDiagram
+    books ||--o{ loans : "ถูกยืมใน"
+    members ||--o{ loans : "ยืม"
+    books {
+        varchar book_id PK
+        varchar title
+        varchar author
+        varchar isbn
+        varchar status "active / retired"
+        timestamptz created_at
+    }
+    members {
+        varchar member_id PK
+        varchar name
+        varchar phone
+        varchar email
+        varchar status "active / suspended"
+        timestamptz joined_at
+    }
+    loans {
+        serial loan_id PK
+        varchar book_id FK
+        varchar member_id FK
+        timestamptz borrowed_at
+        timestamptz due_at
+        timestamptz returned_at "NULL = ยังไม่คืน"
+    }
+```
+
 ## รันบนเครื่อง
 
 **Back-end** (ในโฟลเดอร์ `backend`)
