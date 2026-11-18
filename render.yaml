@@ -4,6 +4,7 @@ services:
     name: library-api
     runtime: python
     plan: free
+    region: singapore # ภูมิภาคเดียวกับฐานข้อมูล Neon เพื่อให้เร็ว
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
